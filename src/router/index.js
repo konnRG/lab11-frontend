@@ -7,11 +7,9 @@ import EventLayoutView from '@/views/event/EventLayoutView.vue'
 import EventDetailView from '@/views/event/EventDetailView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
 import NetWorkErrorView from '@/views/NetworkErrorView.vue'
-import AddEvent from '@/views/EventForm.vue'
 import NProgress from 'nprogress'
 import GStore from '@/store'
-import EventService from '@/services/EventService'
-import OrganizerService from '@/services/OrganizerService.js'
+import EventService from '@/services/AuctionService'
 const routes = [
   {
     path: '/',
@@ -65,21 +63,6 @@ const routes = [
         component: EventEditView
       }
     ]
-  },
-  {
-    path: '/add-event',
-    name: 'AddEvent',
-    component: AddEvent,
-    beforeEnter: () => {
-      return OrganizerService.getOrganizers()
-        .then((response) => {
-          GStore.organizers = response.data
-        })
-        .catch(() => {
-          GStore.organizers = null
-          console.log('cannot load organizer')
-        })
-    }
   },
   {
     path: '/404/:resource',

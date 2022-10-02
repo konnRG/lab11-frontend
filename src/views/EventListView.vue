@@ -1,24 +1,24 @@
 <template>
-  <h1>Events For Good</h1>
+  <h1>Auction</h1>
   <div class="events">
     <div class="search-box">
-      <BaseInput
-        v-model="keyword"
+      <BaseInputVue
+        v-model="keywordDes"
         type="text"
-        label="Search..."
-        @input="updateKeyword"
+        label="Search for Description & Type of auction"
+        @input="updateKeywordDescription"
       />
     </div>
-    <EventCard
-      v-for="event in events"
-      :key="event.id"
-      :event="event"
-    ></EventCard>
+    <AuctionCardVue
+      v-for="auction in auctions"
+      :key="auction.id"
+      :auction="auction"
+    ></AuctionCardVue>
 
     <div class="pagination">
       <router-link
         id="page-prev"
-        :to="{ name: 'EventList', query: { page: page - 1 } }"
+        :to="{ name: 'auction', query: { page: page - 1 } }"
         rel="prev"
         v-if="page != 1"
       >
@@ -27,7 +27,7 @@
 
       <router-link
         id="page-next"
-        :to="{ name: 'EventList', query: { page: page + 1 } }"
+        :to="{ name: 'auction', query: { page: page + 1 } }"
         rel="next"
         v-if="hasNextPage"
       >
@@ -39,12 +39,12 @@
 
 <script>
 // @ is an alias to /src
-import EventCard from '@/components/EventCard.vue'
-import EventService from '@/services/EventService.js'
-import BaseInput from '@/components/BaseInput.vue'
+import BaseInputVue from '@/components/BaseInput.vue'
+import AuctionService from '@/services/AuctionService'
+import AuctionCardVue from '@/components/EventCard.vue'
 
 export default {
-  name: 'EventListView',
+  name: 'AuctionListView',
   props: {
     page: {
       type: Number,
@@ -52,23 +52,25 @@ export default {
     }
   },
   components: {
-    EventCard,
-    BaseInput
+    AuctionCardVue,
+    BaseInputVue
   },
   data() {
     return {
-      events: null,
+      auctions: null,
       totalEvents: 0,
-      keyword: null
+      keywordDes: null,
+      keywordType: null
     }
   },
   // eslint-disable-next-line no-unused-vars
   beforeRouteEnter(routeTo, routeFrom, next) {
-    EventService.getEvents(3, parseInt(routeTo.query.page) || 1)
+    AuctionService.getAuctions(3, parseInt(routeTo.query.page) || 1)
       .then((response) => {
         next((comp) => {
-          comp.events = response.data
+          comp.auctions = response.data
           comp.totalEvents = response.headers['x-total-count']
+          console.log(comp.auctions)
         })
       })
       .catch(() => {
@@ -77,14 +79,14 @@ export default {
   },
   beforeRouteUpdate(routeTo) {
     var queryFunction
-    if (this.keyword == null || this.keyword === '') {
-      queryFunction = EventService.getEvents(
+    if (this.keywordDes == null || this.keywordDes == '') {
+      queryFunction = AuctionService.getAuctions(
         3,
         parseInt(routeTo.query.page) || 1
       )
     } else {
-      queryFunction = EventService.getEventByKeyword(
-        this.keyword,
+      queryFunction = AuctionService.getAuctionByDescription(
+        this.keywordDes,
         3,
         parseInt(routeTo.query.page) || 1
       )
@@ -92,7 +94,7 @@ export default {
 
     queryFunction
       .then((response) => {
-        this.events = response.data // <---
+        this.auctions = response.data // <---
         this.totalEvents = response.headers['x-total-count'] // <---
       })
       .catch(() => {
@@ -106,19 +108,23 @@ export default {
     }
   },
   methods: {
-    updateKeyword() {
+    updateKeywordDescription() {
       var queryFunction
-      if (this.keyword === '') {
-        queryFunction = EventService.getEvents(3, 1)
+      if (this.keyword == '') {
+        queryFunction = AuctionService.getAuctions(3, 1)
       } else {
-        queryFunction = EventService.getEventByKeyword(this.keyword, 3, 1)
+        queryFunction = AuctionService.getAuctionByDescription(
+          this.keywordDes,
+          3,
+          1
+        )
       }
 
       queryFunction
-        .then((response) => {
-          this.events = response.data
-          console.log(this.events)
-          this.totalEvents = response.headers['x-total-count']
+        .then((res) => {
+          this.auctions = res.data
+          console.log(this.auctions)
+          this.totalEvents = res.headers['x-total-count']
           console.log(this.totalEvents)
         })
         .catch(() => {

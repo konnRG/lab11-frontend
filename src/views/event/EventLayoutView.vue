@@ -1,6 +1,6 @@
 <template>
-  <div v-if="GStore.event">
-    <h1>{{ GStore.event.title }}</h1>
+  <div v-if="GStore.auctionItem">
+    <h1>{{ GStore.auctionItem.description }}</h1>
     <div id="nav">
       <router-link :to="{ name: 'EventDetails' }">Details</router-link>
       |
@@ -8,7 +8,7 @@
       |
       <router-link :to="{ name: 'EventEdit' }">Edit</router-link>
     </div>
-    <router-view :event="GStore.event" />
+    <router-view :auctionItem="GStore.auctionItem" />
   </div>
 </template>
 <script>

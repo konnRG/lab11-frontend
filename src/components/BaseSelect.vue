@@ -5,8 +5,8 @@
     :value="modelValue"
     v-bind="{
       ...$attrs,
-      onChange: ($event) => {
-        $emit('update:modelValue', $event.target.value)
+      onChange: ($auctionItem) => {
+        $emit('update:modelValue', $auctionItem.target.value)
       }
     }"
   >

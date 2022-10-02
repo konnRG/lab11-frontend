@@ -1,26 +1,25 @@
 <template>
-  <div v-if="event">
-    <h1>{{ event.title }}</h1>
-    <p>{{ event.time }} on {{ event.date }} @ {{ event.location }}</p>
-    <p>{{ event.description }}</p>
+  <div v-if="auctionItem">
+    <h1>{{ auctionItem.description }}</h1>
+    <p>{{ auctionItem.time }} on {{ auctionItem.date }}</p>
   </div>
 </template>
 
 <script>
-import EventService from '@/services/EventService.js'
+import EventService from '@/services/AuctionService.js'
 
 export default {
   props: ['id'],
   data() {
     return {
-      event: null
+      auctionItem: null
     }
   },
   created() {
     // fetch event (by id) and set local event data
-    EventService.getEvent(this.id)
+    EventService.getAuctionItem(this.id)
       .then((response) => {
-        this.event = response.data
+        this.auctionItem = response.data
       })
       .catch((error) => {
         console.log(error)

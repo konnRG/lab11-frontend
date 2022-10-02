@@ -1,10 +1,9 @@
 <template>
-  <p>{{ event.time }} on {{ event.date }} @ {{ event.location }}</p>
-  <p>{{ event.description }}</p>
+  <p>{{ auctionItem.time }} on {{ auctionItem.date }}</p>
 </template>
 
 <script>
 export default {
-  props: ['id', 'event']
+  props: ['id', 'auctionItem']
 }
 </script>
